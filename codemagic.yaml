@@ -1,0 +1,24 @@
+workflows:
+  ios-workflow:
+    name: iOS Workflow
+    # instance_type: mac_mini
+    max_build_duration: 120
+    environment:
+      vars:
+        XCODE_WORKSPACE: "Runner.xcworkspace"
+        XCODE_SCHEME: "Runner"                
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    scripts: 
+      - name: Install pods
+        script: |
+                    find . -name "Podfile" -execdir pod install \;
+      - name: Flutter build ipa 
+        script: |
+          flutter build ios --debug --no-codesign
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - flutter_drive.log
+   
